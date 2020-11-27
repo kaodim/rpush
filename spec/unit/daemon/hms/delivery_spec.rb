@@ -1,7 +1,7 @@
 require 'unit_spec_helper'
 
 describe Rpush::Daemon::Hms::Delivery do
-  let(:app) { Rpush::Hms::App.create!(name: 'MyApp', auth_key: 'abc123', hms_app_id: 'hms-app-id') }
+  let(:app) { Fixtures.create!(:hms_app, name: 'MyApp', auth_key: 'abc123', hms_app_id: 'hms-app-id') }
   let(:notification) do
     notif = Rpush::Hms::Notification.new(
       app: app, registration_ids: ['xyz'], deliver_after: Time.now, title: 'title', body: 'body',
@@ -17,7 +17,8 @@ describe Rpush::Daemon::Hms::Delivery do
   let(:http) { double(shutdown: nil, request: response) }
   let(:now) { Time.parse('2012-10-14 00:00:00') }
   let(:batch) { double(mark_failed: nil, mark_delivered: nil, mark_retryable: nil, notification_processed: nil) }
-  let(:delivery) { Rpush::Daemon::Hms::Delivery.new(app, http, notification, batch) }
+  let(:token_provider) { double(token: 'auth-token') }
+  let(:delivery) { Rpush::Daemon::Hms::Delivery.new(app, http, notification, batch, token_provider: token_provider) }
   let(:store) { double(create_gcm_notification: double(id: 2)) }
 
   def perform

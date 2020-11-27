@@ -5,11 +5,12 @@ module Rpush
       class Delivery < Rpush::Daemon::Delivery
         # @param [Rpush::Client::Redis::Hms::Notification] notification
         # @param [Rpush::Client::Redis::Hms::App] app
-        def initialize(app, http, notification, batch)
+        def initialize(app, http, notification, batch, token_provider: nil)
           @app = app
           @http = http
           @notification = notification
           @batch = batch
+          @token_provider = token_provider
         end
 
         def perform
@@ -65,14 +66,10 @@ module Rpush
           post = Net::HTTP::Post.new(
             uri.path,
             'Content-Type'  => 'application/json',
-            'Authorization' => "Bearer #{auth_token}"
+            'Authorization' => "Bearer #{@token_provider.token}"
           )
           post.body = @notification.as_json.to_json
           @http.request(uri, post)
-        end
-
-        def auth_token
-          Rpush.config.hms.token_generator.call(@app, @notification)
         end
 
         def safely_parse(raw_json)

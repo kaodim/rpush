@@ -4,7 +4,7 @@ require 'unit/notification_shared.rb'
 describe Rpush::Client::ActiveRecord::Hms::Notification do
   it_should_behave_like 'an Notification subclass'
 
-  let(:app) { Rpush::Client::ActiveRecord::Hms::App.create!(name: 'test', auth_key: 'abc', hms_app_id: 'hms-app-id') }
+  let(:app) { Fixtures.create!(:hms_app) }
   let(:notification_class) { Rpush::Client::ActiveRecord::Hms::Notification }
   let(:notification) { notification_class.new }
 
