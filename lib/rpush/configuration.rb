@@ -16,7 +16,7 @@ module Rpush
     end
   end
 
-  CURRENT_ATTRS = [:push_poll, :embedded, :pid_file, :batch_size, :push, :client, :logger, :log_file, :foreground, :log_level, :plugin, :apns]
+  CURRENT_ATTRS = [:push_poll, :embedded, :pid_file, :batch_size, :push, :client, :logger, :log_file, :foreground, :log_level, :plugin, :apns, :hms]
   DEPRECATED_ATTRS = []
   CONFIG_ATTRS = CURRENT_ATTRS + DEPRECATED_ATTRS
 
@@ -37,6 +37,9 @@ module Rpush
     end
   end
 
+  class HmsConfiguration < Struct.new(:token_generator) # rubocop:disable Style/StructInheritance
+  end
+
   class Configuration < Struct.new(*CONFIG_ATTRS) # rubocop:disable Style/StructInheritance
     include Deprecatable
 
@@ -55,6 +58,7 @@ module Rpush
       self.foreground = false
 
       self.apns = ApnsConfiguration.new
+      self.hms = HmsConfiguration.new
 
       # Internal options.
       self.embedded = false

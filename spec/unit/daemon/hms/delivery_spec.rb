@@ -29,7 +29,7 @@ describe Rpush::Daemon::Hms::Delivery do
   end
 
   before do
-    allow(delivery).to receive_messages(reflect: nil)
+    allow(delivery).to receive_messages(reflect: nil, auth_token: 'bearer-token')
     allow(Rpush::Daemon).to receive_messages(store: store)
     allow(Time).to receive_messages(now: now)
     allow(Rpush).to receive_messages(logger: logger)
