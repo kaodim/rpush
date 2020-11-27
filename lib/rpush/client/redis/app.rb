@@ -18,6 +18,7 @@ module Rpush
         attribute :apn_key_id, :string
         attribute :team_id, :string
         attribute :bundle_id, :string
+        attribute :hms_app_id, :string
  
         index :name
 
