@@ -26,7 +26,7 @@ module Rpush
           end
 
           def priority=(priority)
-            priority = priority.upcase
+            priority = priority&.upcase
             case priority
             when *PRIORITY.values
               super(PRIORITY.key(priority))
