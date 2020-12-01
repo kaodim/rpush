@@ -11,14 +11,13 @@ class Fixtures
   def self.build_hms_notification(attrs)
     attrs ||= {}
     Rpush::Hms::Notification.new(
-      app_id: 'hms-app-id',
+      app_id: 1,
       title: 'title',
       body: 'body',
-      token: ['token1'],
       **attrs
     ).tap do |notif|
       notif.click_action = {
-        type: 3
+        "type" => 3
       }
     end
   end
@@ -30,6 +29,7 @@ class Fixtures
       hms_key_id: 'hms_key_id',
       hms_sub_acc_id: 'hms_sub_acc_id',
       hms_key: 'hms_key',
+      name: 'hms',
       **attrs
     )
   end

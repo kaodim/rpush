@@ -12,6 +12,7 @@ module Rpush
             1 => 'HIGH',
             10 => 'NORMAL'
           }
+          COLLAPSE_KEYS = (-1..100).to_a.freeze
 
           def set_uri(hms_app_id)
             self.uri = "https://push-api.cloud.huawei.com/v1/#{hms_app_id}/messages:send"
@@ -26,13 +27,18 @@ module Rpush
           end
 
           def priority=(priority)
-            priority = priority&.upcase
+            priority = priority.is_a?(Integer) ? PRIORITY[priority] : priority&.upcase
             case priority
             when *PRIORITY.values
               super(PRIORITY.key(priority))
             else
               errors.add(:priority, 'must be one of either "high" or "normal"')
             end
+          end
+
+          def collapse_key=(key)
+            return self.errors.add(:collapse_key,"#{key} is not a valid collapse key") unless key.in?(COLLAPSE_KEYS)
+            super(key.to_s)
           end
 
           def notification
@@ -58,7 +64,7 @@ module Rpush
               'message' => {},
             }
             json['message']['android'] = {}
-            json['message']['android']['collapse_key'] = collapse_key if collapse_key
+            json['message']['android']['collapse_key'] = collapse_key.to_i if collapse_key
             json['message']['android']['urgency'] = PRIORITY[priority] if priority
             json['message']['token'] = self.registration_ids
 

@@ -1,12 +1,10 @@
 require 'unit_spec_helper'
 require 'unit/notification_shared.rb'
 
-describe Rpush::Client::ActiveRecord::Hms::Notification do
-  it_should_behave_like 'an Notification subclass'
-
+describe Rpush::Client::Redis::Hms::Notification do
   let(:app) { Fixtures.create!(:hms_app) }
-  let(:notification_class) { Rpush::Client::ActiveRecord::Hms::Notification }
-  let(:notification) { notification_class.new }
+  let(:notification_class) { Rpush::Client::Redis::Hms::Notification }
+  let(:notification) { notification_class.new(app_id: app.id) }
 
   it 'limits the number of registration ids to 1000' do
     notification.registration_ids = ['a'] * (1000 + 1)
@@ -103,4 +101,4 @@ describe Rpush::Client::ActiveRecord::Hms::Notification do
                             }.deep_stringify_keys)
     end
   end
-end if active_record?
+end unless active_record?
