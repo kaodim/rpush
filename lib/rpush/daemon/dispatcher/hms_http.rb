@@ -2,7 +2,7 @@ module Rpush
   module Daemon
     module Dispatcher
       class HmsHttp
-        def initialize(app, delivery_class, token_provider)
+        def initialize(app, delivery_class, token_provider:)
           @app = app
           @delivery_class = delivery_class
           @http = Net::HTTP::Persistent.new(name: 'rpush')
@@ -11,7 +11,7 @@ module Rpush
 
         def dispatch(payload)
           @delivery_class.new(
-            @app, @http, payload.notification, payload.batch, token_provider: @token_provider.new
+            @app, @http, payload.notification, payload.batch, token_provider: @token_provider.new(@app)
           ).perform
         end
 

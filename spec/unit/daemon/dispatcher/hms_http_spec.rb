@@ -8,13 +8,13 @@ describe Rpush::Daemon::Dispatcher::HmsHttp do
   let(:http) { double }
   let(:token_provider) { double(new: nil) }
   let(:queue_payload) { Rpush::Daemon::QueuePayload.new(batch, notification) }
-  let(:dispatcher) { Rpush::Daemon::Dispatcher::HmsHttp.new(app, delivery_class, token_provider) }
+  let(:dispatcher) { Rpush::Daemon::Dispatcher::HmsHttp.new(app, delivery_class, token_provider: token_provider) }
 
   before { allow(Net::HTTP::Persistent).to receive_messages(new: http) }
 
   it 'constructs a new persistent connection' do
     expect(Net::HTTP::Persistent).to receive(:new)
-    Rpush::Daemon::Dispatcher::HmsHttp.new(app, delivery_class, token_provider)
+    Rpush::Daemon::Dispatcher::HmsHttp.new(app, delivery_class, token_provider: token_provider)
   end
 
   describe 'dispatch' do

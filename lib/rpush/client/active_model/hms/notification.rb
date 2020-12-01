@@ -28,7 +28,7 @@ module Rpush
           def priority=(priority)
             priority = priority.upcase
             case priority
-            when
+            when *PRIORITY.values
               super(PRIORITY.key(priority))
             else
               errors.add(:priority, 'must be one of either "high" or "normal"')

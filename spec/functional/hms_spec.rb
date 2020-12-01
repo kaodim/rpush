@@ -1,12 +1,14 @@
 require 'functional_spec_helper'
 
   describe 'HMS' do
-    let(:app) { Rpush::Hms::App.new }
+    let(:app) { Fixtures.build(:hms_app) }
     let(:notification_with_data) { Rpush::Hms::Notification.new }
     let(:response) { double(Net::HTTPResponse, code: 200, body: { code: '80000000' }.to_json) }
     let(:http) { double(Net::HTTP::Persistent, request: response, shutdown: nil) }
 
     before do
+      allow_any_instance_of(Rpush::Daemon::Hms::Token).to receive(:token).and_return('token')
+
       app.name = 'test'
       app.hms_app_id = 'hms-app-id'
       app.auth_key = 'auth-key'
