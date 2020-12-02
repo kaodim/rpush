@@ -67,11 +67,12 @@ module Rpush
             json['message']['android']['collapse_key'] = collapse_key.to_i if collapse_key
             json['message']['android']['urgency'] = PRIORITY[priority] if priority
             json['message']['token'] = self.registration_ids
+            json['message']['data'] = self.data.to_json
 
             json['message']['android']['notification'] = notification.merge(
               'title' => title,
               'body' => body
-            )
+            ) if notification.present?
             json
           end
 
@@ -82,10 +83,7 @@ module Rpush
               attribute :test_only, :boolean, default: false
 
               validates :app_id, presence: true
-              validates :title, presence: true
-              validates :body, presence: true
               validates_with Rpush::Client::ActiveModel::RegistrationIdsCountValidator, limit: 1000
-              validate :validate_click_action
             end
           end
         end

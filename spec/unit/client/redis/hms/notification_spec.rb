@@ -4,7 +4,7 @@ require 'unit/notification_shared.rb'
 describe Rpush::Client::Redis::Hms::Notification do
   let(:app) { Fixtures.create!(:hms_app) }
   let(:notification_class) { Rpush::Client::Redis::Hms::Notification }
-  let(:notification) { notification_class.new(app_id: app.id) }
+  let(:notification) { notification_class.new(app_id: app.id, data: { message: 'message' }) }
 
   it 'limits the number of registration ids to 1000' do
     notification.registration_ids = ['a'] * (1000 + 1)
@@ -33,11 +33,6 @@ describe Rpush::Client::Redis::Hms::Notification do
 
   context 'click action' do
     subject { notification.valid? }
-    it 'validates action type presence' do
-      subject
-      expect(notification.errors[:notification]).to eq ['Key "type" is required in "click_action"']
-    end
-
     it 'validates action type is a Hash on assignment' do
       notification.click_action = []
       expect(notification.errors[:notification]).to eq ['"click_action" must be a hash']
@@ -96,7 +91,8 @@ describe Rpush::Client::Redis::Hms::Notification do
                                     "body": "body"
                                   }
                                 },
-                                "token": ['token1']
+                                "token": ['token1'],
+                                "data": "{\"message\":\"message\"}"
                               }
                             }.deep_stringify_keys)
     end

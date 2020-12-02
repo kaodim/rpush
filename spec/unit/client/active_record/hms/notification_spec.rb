@@ -35,10 +35,6 @@ describe Rpush::Client::ActiveRecord::Hms::Notification do
 
   context 'click action' do
     subject { notification.valid? }
-    it 'validates action type presence' do
-      subject
-      expect(notification.errors[:notification]).to eq ['Key "type" is required in "click_action"']
-    end
 
     it 'validates action type is a Hash on assignment' do
       notification.click_action = []
@@ -81,6 +77,7 @@ describe Rpush::Client::ActiveRecord::Hms::Notification do
       notification.click_action = {
         'type' => described_class::CLICK_START_APP,
       }
+      notification.data = { message: 'message' }
     end
 
     subject { notification.as_json }
@@ -98,7 +95,8 @@ describe Rpush::Client::ActiveRecord::Hms::Notification do
                                     "body": "body"
                                   }
                                 },
-                                "token": ['token1']
+                                "token": ['token1'],
+                                "data": "{\"message\":\"message\"}"
                               }
                             }.deep_stringify_keys)
     end
