@@ -111,7 +111,7 @@ module Rpush
         end
 
         def other_error(response)
-          handle_failure(response.code, "#{@result['code']}: #{@result['msg']}. RequestId: #{@result['requestId']}")
+          handle_failure(response.code.to_i, "#{@result['code']}: #{@result['msg']}. RequestId: #{@result['requestId']}")
           reflect(:hms_deliver_failure, @app, @notification, @result.merge("http_code" => response.code.to_i))
         end
 
