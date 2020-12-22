@@ -111,8 +111,12 @@ module Rpush
         end
 
         def other_error(response)
+          begin
+            reflect(:hms_deliver_failure, @app, @notification, @result.merge("http_code" => response.code.to_i))
+          rescue StandardError => e
+            log_error("Fail to run hms_deliver_failure callback for notification with id = #{@notification.id}. Result: #{@result}\\n#{e.backtrace[0..20].join('\n')}")
+          end
           handle_failure(response.code.to_i, "#{@result['code']}: #{@result['msg']}. RequestId: #{@result['requestId']}")
-          reflect(:hms_deliver_failure, @app, @notification, @result.merge("http_code" => response.code.to_i))
         end
 
         def retry_message
