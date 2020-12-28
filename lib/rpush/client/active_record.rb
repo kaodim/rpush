@@ -31,3 +31,6 @@ require 'rpush/client/active_record/adm/app'
 
 require 'rpush/client/active_record/pushy/notification'
 require 'rpush/client/active_record/pushy/app'
+
+require 'rpush/client/active_record/hms/notification'
+require 'rpush/client/active_record/hms/app'
